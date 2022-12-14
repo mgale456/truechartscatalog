@@ -95,9 +95,15 @@ data:
       {{- end }}
       {{- if or .Values.frigate.ffmpeg.output_args.detect .Values.frigate.ffmpeg.output_args.record .Values.frigate.ffmpeg.output_args.rtmp }}
       output_args:
-        detect: {{ .Values.frigate.ffmpeg.output_args.detect }}
-        record: {{ .Values.frigate.ffmpeg.output_args.record }}
-        rtmp: {{ .Values.frigate.ffmpeg.output_args.rtmp }}
+        {{- with .Values.frigate.ffmpeg.output_args.detect }}
+        detect: {{ . }}
+        {{- end }}
+        {{- with .Values.frigate.ffmpeg.output_args.record }}
+        record: {{ . }}
+        {{- end }}
+        {{- with .Values.frigate.ffmpeg.output_args.rtmp }}
+        rtmp: {{ . }}
+        {{- end }}
       {{- end }}
     {{- end }}
 
