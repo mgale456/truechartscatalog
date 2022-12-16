@@ -76,10 +76,18 @@ data:
     {{- if .Values.frigate.birdseye.render_config }}
     birdseye:
       enabled: {{ ternary "True" "False" .Values.frigate.birdseye.enabled }}
-      width: {{ .Values.frigate.birdseye.width | default 1280 }}
-      height: {{ .Values.frigate.birdseye.height | default 720 }}
-      quality: {{ .Values.frigate.birdseye.quality | default 8 }}
-      mode: {{ .Values.frigate.birdseye.mode | default "objects" }}
+      {{- with .Values.frigate.birdseye.width }}
+      width: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.birdseye.height }}
+      height: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.birdseye.quality }}
+      quality: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.birdseye.mode }}
+      mode: {{ . }}
+      {{- end }}
     {{- end }}
 
     {{- if .Values.frigate.ffmpeg.render_config }}
@@ -110,13 +118,26 @@ data:
     {{- if .Values.frigate.detect.render_config }}
     detect:
       enabled: {{ ternary "True" "False" .Values.frigate.detect.enabled }}
-      width: {{ .Values.frigate.detect.width | default 1280 }}
-      height: {{ .Values.frigate.detect.height | default 720 }}
-      fps: {{ .Values.frigate.detect.fps | default 5 }}
-      max_disappeared: {{ .Values.frigate.detect.max_disappeared | default 25 }}
+      {{- with .Values.frigate.detect.width }}
+      width: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.detect.height }}
+      height: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.detect.fps }}
+      fps: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.detect.max_disappeared }}
+      max_disappeared: {{ . }}
+      {{- end }}
+      {{- if or .Values.frigate.detect.stationary.interval .Values.frigate.detect.stationary.threshold .Values.frigate.detect.stationary.set_max_frames}}
       stationary:
-        interval: {{ .Values.frigate.detect.stationary.interval | default 0 }}
-        threshold: {{ .Values.frigate.detect.stationary.threshold | default 50 }}
+        {{- with .Values.frigate.detect.stationary.interval }}
+        interval: {{ . }}
+        {{- end }}
+        {{- with .Values.frigate.detect.stationary.threshold }}
+        threshold: {{ . }}
+        {{- end }}
         {{- if (hasKey .Values.frigate.detect.stationary "max_frames") }}
         {{- if or (hasKey .Values.frigate.detect.stationary.max_frames "default") (hasKey .Values.frigate.detect.stationary.max_frames "objects") }}
         {{- if or .Values.frigate.detect.stationary.max_frames.default .Values.frigate.detect.stationary.max_frames.objects }}
@@ -133,6 +154,7 @@ data:
         {{- end }}
         {{- end }}
         {{- end }}
+      {{- end }}
     {{- end }}
 
     {{- if .Values.frigate.objects.render_config }}
@@ -177,30 +199,55 @@ data:
 
     {{- if .Values.frigate.motion.render_config }}
     motion:
-      threshold: {{ .Values.frigate.motion.threshold | default 25 }}
-      contour_area: {{ .Values.frigate.motion.contour_area | default 30 }}
-      delta_alpha: {{ .Values.frigate.motion.delta_alpha | default 0.2 }}
-      frame_alpha: {{ .Values.frigate.motion.frame_alpha | default 0.2 }}
-      frame_height: {{ .Values.frigate.motion.frame_height | default 50 }}
+      {{- with .Values.frigate.motion.threshold }}
+      threshold: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.motion.contour_area }}
+      contour_area: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.motion.delta_alpha }}
+      delta_alpha: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.motion.frame_alpha }}
+      frame_alpha: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.motion.frame_height }}
+      frame_height: {{ . }}
+      {{- end }}
       {{- with .Values.frigate.motion.mask }}
       mask: {{ . }}
       {{- end }}
+      {{- with .Values.frigate.motion.improve_contrast }}
       improve_contrast: {{ ternary "True" "False" .Values.frigate.motion.improve_contrast }}
-      mqtt_off_delay: {{ .Values.frigate.motion.mqtt_off_delay | default 30 }}
+      {{- end }}
+      {{- with .Values.frigate.motion.mqtt_off_delay }}
+      mqtt_off_delay: {{ . }}
+      {{- end }}
     {{- end }}
 
     {{- if .Values.frigate.record.render_config }}
     record:
       enabled: {{ ternary "True" "False" .Values.frigate.record.enabled }}
-      expire_interval: {{ .Values.frigate.record.expire_interval | default 60 }}
+      {{- with .Values.frigate.record.expire_interval }}
+      expire_interval: {{ . }}
+      {{- end }}
       {{- if .Values.frigate.record.retain.render_config }}
       retain:
-        days: {{ .Values.frigate.record.retain.days | default 0 }}
-        mode: {{ .Values.frigate.record.retain.mode | default "all" }}
+        {{- with .Values.frigate.record.retain.days }}
+        days: {{ . }}
+        {{- end }}
+        {{- with .Values.frigate.record.retain.mode }}
+        mode: {{ . }}
+        {{- end }}
       {{- end }}
+      {{- if .Values.frigate.record.events.render_config }}
       events:
-        pre_capture: {{ .Values.frigate.record.events.pre_capture | default 5 }}
-        post_capture: {{ .Values.frigate.record.events.post_capture | default 5 }}
+        {{- with .Values.frigate.record.events.pre_capture }}
+        pre_capture: {{ . }}
+        {{- end }}
+        {{- with .Values.frigate.record.events.post_capture }}
+        post_capture: {{ . }}
+        {{- end }}
         {{- with .Values.frigate.record.events.objects }}
         objects:
           {{- range . }}
@@ -216,7 +263,9 @@ data:
         {{- if .Values.frigate.record.events.retain.render_config }}
         retain:
           default: {{ .Values.frigate.record.events.retain.default | default 10 }}
-          mode: {{ .Values.frigate.record.events.retain.mode | default "motion" }}
+          {{- with .Values.frigate.record.events.retain.mode }}
+          mode: {{ . }}
+          {{- end }}
           {{- with .Values.frigate.record.events.retain.objects }}
           objects:
           {{- range . }}
@@ -224,15 +273,24 @@ data:
           {{- end }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- end }}
 
     {{- if .Values.frigate.snapshots.render_config }}
     snapshots:
       enabled: {{ ternary "True" "False" .Values.frigate.snapshots.enabled }}
+      {{- with .Values.frigate.snapshots.clean_copy }}
       clean_copy: {{ ternary "True" "False" .Values.frigate.snapshots.clean_copy }}
+      {{- end }}
+      {{- with .Values.frigate.snapshots.timestamp }}
       timestamp: {{ ternary "True" "False" .Values.frigate.snapshots.timestamp }}
+      {{- end }}
+      {{- with .Values.frigate.snapshots.bounding_box }}
       bounding_box: {{ ternary "True" "False" .Values.frigate.snapshots.bounding_box }}
+      {{- end }}
+      {{- with .Values.frigate.snapshots.crop }}
       crop: {{ ternary "True" "False" .Values.frigate.snapshots.crop }}
+      {{- end }}
       {{- with .Values.frigate.snapshots.height }}
       height: {{ . }}
       {{- end }}
@@ -261,19 +319,31 @@ data:
 
     {{- if .Values.frigate.live.render_config }}
     live:
-      height: {{ .Values.frigate.live.height | default 720 }}
-      quality: {{ .Values.frigate.live.quality | default 8 }}
+      {{- with .Values.frigate.live.height }}
+      height: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.live.quality }}
+      quality: {{ . }}
+      {{- end }}
     {{- end }}
 
     {{- if .Values.frigate.timestamp_style.render_config }}
     timestamp_style:
-      position: {{ .Values.frigate.timestamp_style.position | default "tl" }}
-      format: {{ .Values.frigate.timestamp_style.format | quote }}
+      {{- with .Values.frigate.timestamp_style.position }}
+      position: {{ . }}
+      {{- end }}
+      {{- with .Values.frigate.timestamp_style.format }}
+      format: {{ . }}
+      {{- end }}
+      {{- if .Values.frigate.timestamp_style.color.render_config }}
       color:
         red: {{ .Values.frigate.timestamp_style.color.red | default 255 }}
         green: {{ .Values.frigate.timestamp_style.color.green | default 255 }}
         blue: {{ .Values.frigate.timestamp_style.color.blue | default 255 }}
-      thickness: {{ .Values.frigate.timestamp_style.thickness | default 2 }}
+      {{- end }}
+      {{- with .Values.frigate.timestamp_style.thickness }}
+      thickness: {{ . }}
+      {{- end }}
       {{- if ne .Values.frigate.timestamp_style.effect "None" }}
       effect: {{ .Values.frigate.timestamp_style.effect }}
       {{- end }}
