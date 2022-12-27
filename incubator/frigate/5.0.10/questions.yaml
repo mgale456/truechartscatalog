@@ -85,6 +85,7 @@ questions:
   - variable: frigate
     group: App Configuration
     label: Frigate Configuration
+    description: Refer to the Frigate docs for more information. https://docs.frigate.video/configuration/index/
     schema:
       additional_attrs: true
       type: dict
