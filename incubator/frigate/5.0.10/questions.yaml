@@ -457,13 +457,11 @@ questions:
                       description: Width of the frame for the input with the detect role
                       schema:
                         type: int
-                        "null": true
                     - variable: height
                       label: Height
                       description: Height of the frame for the input with the detect role
                       schema:
                         type: int
-                        "null": true
                     - variable: fps
                       label: FPS
                       description: Desired fps for your camera for the input with the detect role. Recommended value of 5. Ideally, try and reduce your FPS on the camera.
